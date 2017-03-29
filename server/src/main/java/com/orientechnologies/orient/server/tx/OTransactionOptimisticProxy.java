@@ -32,7 +32,6 @@ import com.orientechnologies.orient.client.remote.message.tx.ORecordOperationReq
 import com.orientechnologies.orient.core.db.ODatabaseDocumentInternal;
 import com.orientechnologies.orient.core.db.record.OIdentifiable;
 import com.orientechnologies.orient.core.db.record.ORecordOperation;
-import com.orientechnologies.orient.core.exception.OConcurrentModificationException;
 import com.orientechnologies.orient.core.exception.ORecordNotFoundException;
 import com.orientechnologies.orient.core.exception.OSerializationException;
 import com.orientechnologies.orient.core.exception.OTransactionException;
@@ -45,9 +44,11 @@ import com.orientechnologies.orient.core.record.impl.ODocument;
 import com.orientechnologies.orient.core.record.impl.ODocumentInternal;
 import com.orientechnologies.orient.core.serialization.serializer.OStringSerializerHelper;
 import com.orientechnologies.orient.core.serialization.serializer.record.string.ORecordSerializerSchemaAware2CSV;
+import com.orientechnologies.orient.core.storage.OBasicTransaction;
 import com.orientechnologies.orient.core.tx.OTransactionIndexChanges;
 import com.orientechnologies.orient.core.tx.OTransactionOptimistic;
 import com.orientechnologies.orient.core.tx.OTransactionRealAbstract;
+import com.orientechnologies.orient.core.tx.OTransactionRecordIndexOperation;
 import com.orientechnologies.orient.enterprise.channel.binary.OChannelBinaryProtocol;
 
 public class OTransactionOptimisticProxy extends OTransactionOptimistic {
@@ -179,7 +180,7 @@ public class OTransactionOptimisticProxy extends OTransactionOptimistic {
   @Override
   public ORecord getRecord(final ORID rid) {
     ORecord record = super.getRecord(rid);
-    if (record == OTransactionRealAbstract.DELETED_RECORD)
+    if (record == OBasicTransaction.DELETED_RECORD)
       return record;
     else if (record == null && rid.isNew())
       // SEARCH BETWEEN CREATED RECORDS

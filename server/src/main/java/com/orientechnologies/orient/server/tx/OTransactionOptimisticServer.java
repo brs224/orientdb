@@ -17,6 +17,7 @@ import com.orientechnologies.orient.core.record.ORecord;
 import com.orientechnologies.orient.core.record.ORecordInternal;
 import com.orientechnologies.orient.core.record.impl.ODocument;
 import com.orientechnologies.orient.core.record.impl.ODocumentInternal;
+import com.orientechnologies.orient.core.storage.OBasicTransaction;
 import com.orientechnologies.orient.core.tx.OTransactionIndexChangesPerKey;
 import com.orientechnologies.orient.core.tx.OTransactionOptimistic;
 import com.orientechnologies.orient.core.tx.OTransactionRealAbstract;
@@ -169,7 +170,7 @@ public class OTransactionOptimisticServer extends OTransactionOptimistic {
   @Override
   public ORecord getRecord(final ORID rid) {
     ORecord record = super.getRecord(rid);
-    if (record == OTransactionRealAbstract.DELETED_RECORD)
+    if (record == OBasicTransaction.DELETED_RECORD)
       return record;
     else if (record == null && rid.isNew())
       // SEARCH BETWEEN CREATED RECORDS
